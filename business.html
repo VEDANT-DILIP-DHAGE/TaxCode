@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Corporate Tax Calculator for AY 2024-25</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 1.2em;
+            color: #28a745;
+            text-align: center;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+        }
+        .back-button button {
+            width: 150px;
+            height: 40px;
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button button:hover {
+            background-color: #5a6268;
+        }
+        .info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Corporate Tax Calculator</h1>
+    <h2>Assessment Year 2024-25</h2>
+    <form id="tax-form">
+        <label for="totalIncome">Total Income (₹):</label>
+        <input type="number" id="totalIncome" name="totalIncome" min="0" required>
+
+        <!-- Moved to 2nd Position -->
+        <label for="deductions80IAIAC">Select Deductions (80IA/80IAC):</label>
+        <select id="deductions80IAIAC" name="deductions80IAIAC" required>
+            <option value="none">None</option>
+            <option value="80IA">Section 80IA (Profit Deduction for Infrastructure)</option>
+            <option value="80IAC">Section 80IAC (Startup Deduction for 3 Years)</option>
+        </select>
+
+        <div id="info-section" class="info hidden"></div>
+
+        <!-- Moved to 3rd Position -->
+        <label for="donations80G" id="donations-label">Donations under Section 80G & 80GGA & 80GGB (₹):</label>
+        <input type="number" id="donations80G" name="donations80G" min="0" required>
+
+        <!-- Moved to 4th Position -->
+        <label for="taxOption" id="tax-option-label">Select Tax Option:</label>
+        <select id="taxOption" name="taxOption" required>
+            <option value="normal">Normal Tax Rate 30%</option>
+            <option value="115BA_less_400Cr">Section 115BA 25% (Turnover ≤ ₹400 Cr)</option>
+            <option value="115BA_more_400Cr">Section 115BA 25% (Turnover > ₹400 Cr)</option>
+            <option value="115BAA">Section 115BAA 22% (For Domestic Companies Only)</option>
+            <option value="115BAB">Section 115BAB 15% (For Domestic Manufacturing Companies Established after October 1,2019, and Start Production Before 31st March 2024)</option>
+        </select>
+
+        <!-- Moved to 5th Position -->
+        <label for="surcharge" id="surcharge-label">Select Surcharge:</label>
+        <select id="surcharge" name="surcharge" required>
+            <option value="7">7% - Taxable income above ₹ 1 core – Up to ₹ 10 crore</option>
+            <option value="12">12% - Taxable income above ₹ 10 crore</option>
+            <option value="10">10% - If Company opting for taxability u/s 115BAA or Section 115BAB</option>
+        </select>
+
+        <button type="submit">Calculate Tax</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<div class="back-button">
+    <button onclick="window.location.href='index.html'">Back to Home</button>
+</div>
+
+<script>
+    const deductionSelect = document.getElementById('deductions80IAIAC');
+    const infoSection = document.getElementById('info-section');
+    const donationsLabel = document.getElementById('donations-label');
+    const taxOptionLabel = document.getElementById('tax-option-label');
+    const surchargeLabel = document.getElementById('surcharge-label');
+    const donationsInput = document.getElementById('donations80G');
+    const taxOptionSelect = document.getElementById('taxOption');
+    const surchargeSelect = document.getElementById('surcharge');
+
+    deductionSelect.addEventListener('change', function() {
+        if (deductionSelect.value === '80IA') {
+            infoSection.classList.remove('hidden');
+            infoSection.innerHTML = `
+                <strong>Section 80IA Information:</strong><br>
+                Your business needs to meet the following criteria to be eligible for tax benefits under Section 80IA:<br>
+                1. Your business must be incorporated in India and engage in infrastructure development.<br>
+                2. Register with relevant authorities like the Central Electricity Regulatory Commission.<br>
+                3. Business must have commenced operating between 1 April 1995 and 1 April 2017.
+            `;
+            donationsLabel.classList.add('hidden');
+            taxOptionLabel.classList.add('hidden');
+            surchargeLabel.classList.add('hidden');
+            donationsInput.classList.add('hidden');
+            taxOptionSelect.classList.add('hidden');
+            surchargeSelect.classList.add('hidden');
+        } else if (deductionSelect.value === '80IAC') {
+            infoSection.classList.remove('hidden');
+            infoSection.innerHTML = `
+                <strong>Section 80IAC Information:</strong><br>
+                The following criteria must be satisfied to comply with Section 80IAC:<br>
+                1. The business must be a startup engaged in innovation, job creation, or wealth generation.<br>
+                2. It must be incorporated between March 31, 2016, and April 1, 2025.<br>
+                3. Annual turnover should not exceed Rs. 100 crore.<br>
+                4. The startup must be certified by the Inter-Ministerial Board.
+            `;
+            donationsLabel.classList.add('hidden');
+            taxOptionLabel.classList.add('hidden');
+            surchargeLabel.classList.add('hidden');
+            donationsInput.classList.add('hidden');
+            taxOptionSelect.classList.add('hidden');
+            surchargeSelect.classList.add('hidden');
+        } else {
+            infoSection.classList.add('hidden');
+            donationsLabel.classList.remove('hidden');
+            taxOptionLabel.classList.remove('hidden');
+            surchargeLabel.classList.remove('hidden');
+            donationsInput.classList.remove('hidden');
+            taxOptionSelect.classList.remove('hidden');
+            surchargeSelect.classList.remove('hidden');
+        }
+    });
+
+    document.getElementById("tax-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const formData = {
+        totalIncome: parseFloat(document.getElementById("totalIncome").value),
+        deductions80IAIAC: document.getElementById("deductions80IAIAC").value,
+        donations80G: parseFloat(document.getElementById("donations80G").value),
+        taxOption: document.getElementById("taxOption").value,
+        surcharge: document.getElementById("surcharge").value
+    };
+
+    if (formData.deductions80IAIAC === '80IA' || formData.deductions80IAIAC === '80IAC') {
+        document.getElementById("result").innerHTML = "<p>Your tax is NIL due to Section 80IA/80IAC deductions.</p>";
+    } else {
+        fetch("http://127.0.0.1:5000/calculate_business_tax", {  // Updated to the correct URL
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById("result").innerHTML = `<p style="color:red;">${data.error}</p>`;
+            } else {
+                document.getElementById("result").innerHTML = `
+                    <p><strong>Total Income:</strong> ₹${data.totalIncome}</p>
+                    <p><strong>Total Deductions:</strong> ₹${data.totalDeductions}</p>
+                    <p><strong>Taxable Income:</strong> ₹${data.taxableIncome}</p>
+                    <p><strong>Income Tax:</strong> ₹${data.incomeTax}</p>
+                    <p><strong>Surcharge:</strong> ₹${data.surcharge}</p>
+                    <p><strong>Health & Education Cess:</strong> ₹${data.cess}</p>
+                    <p><strong>Total Tax Liability:</strong> ₹${data.totalTax}</p>
+                `;
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+});
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1f0505;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Container holding the blurred background and text */
+.main-background {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Adjust as needed */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(134, 116, 116);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Pseudo-element for the blurred background */
+.main-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../images/tax_Calculator.jpeg');
+    /* Replace with your image URL */
+    /* background-size: cover; */ 
+    background-position: center;
+    filter: blur(3px);
+    /* Adjust the blur intensity */
+    z-index: -1;
+    /* Place behind the content */
+}
+
+/* Styling the text to be clear and on top of the blur */
+.main-background .content {
+    position: relative;
+    z-index: 1;
+    /* Ensure text is above the blurred background */
+    padding: 20px;
+}
+
+.taxnexus-block {
+    background-color: #bab9c1;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    height: 75%;
+    overflow: auto;
+}
+
+.taxnexus-block h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #0d0d0d;
+}
+
+.taxnexus-block .options {
+    margin: 20px 0;
+}
+
+.taxnexus-block .options a {
+    display: block;
+    padding: 15px;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #106ce3;
+    background: #e0e6e1;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.taxnexus-block .options a:hover {
+    background: #524a81;
+}
+
+.taxnexus-block .info {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.taxnexus-block .info h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+.taxnexus-block .info p {
+    font-size: 16px;
+    color: #666;
+}
+
+.taxnexus-block .info .contact-info,
+.taxnexus-block .info .faqs, 
+.taxnexus-block .info .about-info {
+    margin-top: 10px;
+}
+
+.faqs .faq-content,
+.contact-info .contact-content,
+.about-info .about-content {
+    display: none;
+    /* Initially hide the FAQ content */
+    padding-top: 10px;
+}
+
+.faqs .toggle-button,
+.contact-info .toggle-button,
+.about-info .toggle-button {
+    cursor: pointer;
+    font-size: 25px;
+    color: #007bff;
+    padding: 5px;
+    display: inline-block;
+    border: none;
+    background: none;
+}
+
+.faqs .toggle-button:after,
+.contact-info .toggle-button:after,
+.about-info .toggle-button:after {
+    content: '▼';
+    /* Down arrow */
+    display: inline-block;
+    margin-left: 10px;
+    transition: transform 0.5s ease;
+}
+
+.faqs .toggle-button.collapsed:after,
+.contact-info .toggle-button.collapsed:after,
+.about-info .toggle-button.collapsed:after {
+    content: '▼';
+    /* Up arrow */
+    transform: rotate(180deg);
+    /* Rotate arrow for collapse */
+}
